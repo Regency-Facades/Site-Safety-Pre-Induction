@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regency Facades - Site Safety Pre-Induction</title>
+<meta name="description" content="Digital Site Safety Pre-Induction questionnaire. Completed online, sent directly to site management.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" type="image/jpeg" href="logo.png">
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link href="https://fonts.bunny.net/css?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --cream: #20242a;
+  --cream-dim: rgba(32, 36, 42, 0.72);
+  --brand-orange: #e87a24;
+  --brand-orange-deep: #c0651c;
+  --brand-grey: #808285;
+  --glass: #ffffff;
+  --line: rgba(32, 36, 42, 0.16);
+  --radius: 22px;
+  --display: 'Fraunces', serif;
+  --body: 'Space Grotesk', sans-serif;
+  color-scheme: light;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: #ffffff;
+  color: var(--cream);
+  font: 400 1rem/1.65 var(--body);
+}
+::selection { background: var(--brand-orange); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 3px; border-radius: 6px; }
+a { color: inherit; }
+.wrap { width: min(760px, 92%); margin: 0 auto; }
+
+header { padding: 4.5rem 0 2.5rem; text-align: center; }
+.logo-container { width: 280px; margin: 0 auto 1.5rem; }
+.logo-container img { width: 100%; height: auto; display: block; object-fit: contain; }
+h2.form-title { font: 400 clamp(1.6rem, 5vw, 2.2rem)/1.1 var(--display); color: var(--brand-orange); }
+.intro { color: var(--cream-dim); max-width: 58ch; margin: 1rem auto 0; font-size: 0.97rem; }
+
+.glass { background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.panel { padding: clamp(1.4rem, 4vw, 2.4rem); margin: 2rem 0 4rem; }
+.sec { font: 600 0.75rem var(--body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--brand-grey); margin: 2.2rem 0 1.2rem; }
+.sec:first-child { margin-top: 0; }
+.field { margin-bottom: 1.2rem; }
+.field > span { display: block; font: 500 0.85rem var(--body); color: var(--cream-dim); margin-bottom: 0.5rem; }
+.input, textarea {
+  width: 100%; padding: 0.9rem 1.1rem; border-radius: 14px; border: 1px solid var(--line);
+  background: #ffffff; color: var(--cream); font: 400 0.95rem var(--body);
+  transition: border-color 0.2s;
+}
+.input:focus, textarea:focus { border-color: var(--brand-orange); outline: none; }
+.input::placeholder, textarea::placeholder { color: rgba(32, 36, 42, 0.48); }
+textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
+
+.q-box {
+  border: 1px solid var(--line); border-radius: 16px; padding: 1.2rem;
+  margin-bottom: 1.2rem; background: #ffffff;
+}
+.q-title {
+  font: 500 1rem/1.5 var(--body); color: var(--cream); margin-bottom: 0.8rem;
+  display: flex; gap: 0.6rem; align-items: flex-start;
+}
+.q-num {
+  display: inline-flex; justify-content: center; align-items: center;
+  background: var(--brand-grey); color: var(--cream);
+  width: 24px; height: 24px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; flex: none; margin-top: 0.15rem;
+}
+
+/* Medical Disclosure Table Styles */
+.med-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); gap: 1rem; flex-wrap: wrap; }
+.med-row:last-child { border-bottom: none; padding-bottom: 0.5rem; }
+.med-row > span { font: 500 0.9rem var(--body); color: var(--cream); flex: 1; min-width: 200px; }
+.yns { display: flex; gap: 0.5rem; flex: none; }
+.yn { position: relative; }
+.yn input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.yn span { display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 36px; border-radius: 999px; border: 1px solid var(--line); color: var(--cream-dim); font: 600 0.85rem var(--body); cursor: pointer; transition: 0.2s; }
+.yn input:checked + span { background: var(--brand-orange); color: #20242a; border-color: var(--brand-orange); }
+
+.sig-wrap { border: 1px solid var(--line); border-radius: 16px; background: #ffffff; padding: 1rem; }
+.sig-wrap canvas { width: 100%; height: 200px; background: #ffffff; border-radius: 10px; cursor: crosshair; display: block; touch-action: none; }
+.sig-actions { display: flex; gap: 0.6rem; margin-top: 0.7rem; justify-content: flex-end; }
+.sig-clear { background: none; border: 1px solid var(--line); color: var(--cream-dim); padding: 0.4rem 0.9rem; border-radius: 999px; font: 500 0.8rem var(--body); cursor: pointer; transition: 0.2s; }
+.sig-clear:hover { color: var(--cream); border-color: var(--brand-grey); }
+
+.declare { display: flex; gap: 0.8rem; align-items: flex-start; margin-top: 1.5rem; font-size: 0.9rem; color: var(--cream-dim); line-height: 1.6; }
+.declare input { width: 1.2rem; height: 1.2rem; margin-top: 0.2rem; accent-color: var(--brand-orange); flex: none; cursor: pointer; }
+.declare span { cursor: pointer; }
+
+.actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 2rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.95rem 1.8rem; border-radius: 999px; font: 600 0.95rem/1 var(--body); letter-spacing: 0.02em; border: 1px solid transparent; cursor: pointer; transition: transform 0.25s, box-shadow 0.25s, background 0.25s; }
+.btn.primary { background: linear-gradient(135deg, var(--brand-orange), var(--brand-orange-deep)); color: #f8fafc; box-shadow: 0 8px 30px -8px rgba(232, 122, 36, 0.45); }
+.btn.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px -10px rgba(232, 122, 36, 0.6); }
+.btn.ghost { color: var(--cream); border-color: rgba(248, 250, 252, 0.25); background: rgba(248, 250, 252, 0.04); }
+.btn.ghost:hover { background: rgba(248, 250, 252, 0.1); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+
+.note { font-size: 0.8rem; color: var(--cream-dim); margin-top: 1.1rem; }
+
+.translation-tools { display: flex; align-items: center; justify-content: center; gap: 0.7rem; flex-wrap: wrap; margin: 1rem auto 0; color: var(--cream-dim); font-size: 0.85rem; }
+.translation-tools select { max-width: 100%; padding: 0.55rem 2rem 0.55rem 0.75rem; border: 1px solid var(--line); border-radius: 8px; background: #ffffff; color: var(--cream); font: 500 0.85rem var(--body); }
+.text-tools { display: inline-flex; align-items: center; gap: 0.35rem; margin-left: 0.5rem; vertical-align: middle; white-space: nowrap; }
+.text-tools button { min-height: 34px; padding: 0.35rem 0.55rem; border: 1px solid var(--line); border-radius: 6px; background: #ffffff; color: var(--cream); font: 500 0.74rem var(--body); cursor: pointer; }
+.text-tools button:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+.text-tools button:disabled { opacity: 0.6; cursor: wait; }
+.translated-copy { color: var(--cream); font-weight: 500; }
+.qual-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) auto; gap: 0.8rem; align-items: end; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
+.qual-row label { display: block; font: 500 0.8rem var(--body); color: var(--cream-dim); margin-bottom: 0.35rem; }
+.qual-row .sig-clear { height: 44px; }
+.qual-photo-wrap { grid-column: 1 / -1; }
+.qual-none { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--cream-dim); }
+.qual-none input { accent-color: var(--brand-orange); width: 1.1rem; height: 1.1rem; }
+.header-nav { display: flex; justify-content: flex-start; margin: 0 auto 1.5rem; text-align: left; }
+.header-nav .btn { text-decoration: none; }
+.toast { position: fixed; left: 50%; bottom: 1.5rem; transform: translate(-50%, 20px); background: #ffffff; color: var(--cream); border: 1px solid var(--line); padding: 0.8rem 1.4rem; border-radius: 999px; font: 600 0.9rem var(--body); opacity: 0; pointer-events: none; transition: 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 120; max-width: 92%; text-align: center; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.16); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 600px) {
+  header { padding: 1.5rem 0 1rem; }
+  .header-nav { margin-bottom: 1.25rem; }
+  .header-nav .btn { min-height: 44px; padding: 0.75rem 1rem; }
+  .logo-container { width: min(240px, 72vw); margin-bottom: 1rem; }
+  .intro { padding: 0 0.5rem; }
+  .wrap { width: calc(100% - 1rem); }
+  .panel { padding: 1rem; margin: 1rem 0 2rem; }
+  .sec { letter-spacing: 0.1em; }
+  .q-box { padding: 0.9rem; }
+  .med-row { gap: 0.5rem; }
+  .med-row > span { flex-basis: 100%; min-width: 0; }
+  .yns { width: 100%; }
+  .actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .actions .btn { width: 100%; min-height: 48px; padding: 0.85rem 1rem; line-height: 1.3; }
+  .declare { gap: 0.65rem; font-size: 0.85rem; }
+  .translation-tools { padding: 0 0.5rem; }
+  .translation-tools select { min-width: 0; flex: 1 1 100%; }
+  .text-tools { margin: 0.35rem 0 0 0.25rem; }
+  .text-tools button { min-height: 40px; padding: 0.45rem 0.6rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="header-nav wrap" aria-label="Pre-Induction navigation">
+    <a class="btn ghost" href="induction.html">Return to Site Pre-Induction</a>
+  </nav>
+  <div class="logo-container">
+    <img src="logo.png" alt="Regency Facades">
+  </div>
+  <h2 class="form-title">Site Pre-Induction Assessment</h2>
+  <p class="intro">Please answer the scenarios below to confirm your understanding of our site's safety protocols. Upon submission, a signed PDF will be automatically generated and sent to Site Management.</p>
+  <div class="translation-tools">
+    <label for="translationLanguage">Translation language</label>
+    <select id="translationLanguage" aria-label="Choose a language for translation and speech"></select>
+  </div>
+</header>
+
+<div class="wrap">
+<form id="inductionForm" class="glass panel">
+  
+  <p class="sec">1 · Operative Details</p>
+  <div class="field">
+    <span>Full Name *</span>
+    <input class="input" id="fname" type="text" autocomplete="name" placeholder="e.g. John Doe" required>
+  </div>
+  
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+    <div class="field">
+      <span>Company / Subcontractor *</span>
+      <input class="input" id="fcompany" type="text" placeholder="e.g. BuildRight Ltd" required>
+    </div>
+    <div class="field">
+      <span>Trade / Role *</span>
+      <input class="input" id="frole" type="text" placeholder="e.g. Scaffolder" required>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+    <div class="field">
+      <span>Phone Number *</span>
+      <input class="input" id="fphone" type="tel" autocomplete="tel" placeholder="e.g. 07xxx xxx xxx" required>
+    </div>
+    <div class="field">
+      <span>Email Address</span>
+      <input class="input" id="femail" type="email" autocomplete="email" placeholder="you@example.com">
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;border-top:1px solid var(--line);padding-top:1.5rem;margin-top:.5rem;">
+    <div class="field">
+      <span>Emergency Contact Name *</span>
+      <input class="input" id="femergname" type="text" placeholder="Name of next of kin" required>
+    </div>
+    <div class="field">
+      <span>Emergency Contact Phone *</span>
+      <input class="input" id="femergphone" type="tel" placeholder="Emergency number" required>
+    </div>
+  </div>
+
+  <p class="sec" style="margin-top:3rem;">2 · Knowledge & Scenario Assessment</p>
+  <p class="note" style="margin-top:-.5rem;margin-bottom:1.5rem;">Please provide clear, detailed answers for each scenario based on the pre-induction briefing.</p>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">1</span> Awareness & GDPR</div>
+    <div class="field">
+      <span>Why is it important to get explicit consent before collecting personal data, and what does proper data mean for the operative privacy standards?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">2</span> Medication Disclosure</div>
+    <div class="field">
+      <span>Which types of medication must you disclose to site management, and why is it important to share this information?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">3</span> Medical Conditions & Sensitivities</div>
+    <div class="field">
+      <span>Why must you inform site management of any sensory sensitivities or medical conditions upon pre-induction, and how does this help in providing necessary support?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">4</span> Drugs & Alcohol Policy</div>
+    <div class="field">
+      <span>Why does the zero-tolerance policy apply to the after-effects of alcohol, and how does impairment impact site safety?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">5</span> Personal Protective Equipment (PPE)</div>
+    <div class="field">
+      <span>Why must you never use a colleague's damaged PPE or RPE, and what is the exact process to report such defects for immediate replacement?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">6</span> Working at Height</div>
+    <div class="field">
+      <span>Why is tampering with scaffolding or access platforms strictly forbidden, and what immediate action must you take if you notice instability or work being done unsafely?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">7</span> Fire Emergency Response</div>
+    <div class="field">
+      <span>Why shouldn't you try to put down a fire unless trained, and what are the procedures regarding evacuation and re-entering the site?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">8</span> Emergency Response & First Aid</div>
+    <div class="field">
+      <span>What is the immediate action for a life-threatening emergency versus a non-life-threatening one, and how do you identify the First Aider?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">9</span> General Site Rules</div>
+    <div class="field">
+      <span>Why is it mandatory to sign in and out every single time, and why is good housekeeping critical for everyone's safety?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box">
+    <div class="q-title"><span class="q-num">10</span> COSHH & Environment</div>
+    <div class="field">
+      <span>How must chemicals be handled according to COSHH, and what is the procedure for waste segregation and environmental spills?</span>
+      <textarea class="q-answer" required placeholder="Type your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="q-box" style="background: #ffffff; border-color: rgba(232, 122, 36, 0.4);">
+    <div class="q-title" style="color: var(--brand-orange);"><span class="q-num" style="background: var(--brand-orange); color: #fff;">11</span> RAMS Rescue Plan</div>
+    <div class="field">
+      <span style="color: var(--cream);">Based on your specific trade and work requirements, please explain how your own RAMS rescue plan will be implemented in case of an emergency:</span>
+      <textarea class="q-answer" required placeholder="Detail your RAMS rescue implementation..." style="background: #ffffff;"></textarea>
+    </div>
+  </div>
+
+  <div class="q-box" id="qualBox">
+    <div class="q-title"><span class="q-num">12</span> Qualifications</div>
+    <div class="field">
+      <span>Please confirm your qualifications, including the registration number and expiry date of each. Add as many as apply to you.</span>
+    </div>
+    <label class="qual-none"><input type="checkbox" id="qualNone"> I do not hold any relevant qualifications</label>
+    <div id="qualRows"></div>
+    <div class="sig-actions" style="justify-content:flex-start;"><button type="button" class="sig-clear" id="qualAdd">+ Add another qualification</button></div>
+  </div>
+
+  <!-- Medical Disclosure Section -->
+  <p class="sec" style="margin-top:3rem;">3 · Confidential Medical Disclosure</p>
+  <p class="note" style="margin-top:-.5rem;margin-bottom:1.5rem;">As discussed in the pre-induction, this information is strictly confidential and critical for emergency services. Do you currently suffer from or have a history of:</p>
+
+  <div class="q-box" style="padding: 0.5rem 1.2rem;">
+    <div class="med-row">
+      <span>Heart conditions or High Blood Pressure?</span>
+      <div class="yns">
+        <label class="yn"><input type="radio" name="m1" value="No" checked><span>No</span></label>
+        <label class="yn"><input type="radio" name="m1" value="Yes"><span>Yes</span></label>
+      </div>
+    </div>
+    <div class="med-row">
+      <span>Diabetes?</span>
+      <div class="yns">
+        <label class="yn"><input type="radio" name="m2" value="No" checked><span>No</span></label>
+        <label class="yn"><input type="radio" name="m2" value="Yes"><span>Yes</span></label>
+      </div>
+    </div>
+    <div class="med-row">
+      <span>Epilepsy or Seizures?</span>
+      <div class="yns">
+        <label class="yn"><input type="radio" name="m3" value="No" checked><span>No</span></label>
+        <label class="yn"><input type="radio" name="m3" value="Yes"><span>Yes</span></label>
+      </div>
+    </div>
+    <div class="med-row">
+      <span>Asthma or Respiratory Issues?</span>
+      <div class="yns">
+        <label class="yn"><input type="radio" name="m4" value="No" checked><span>No</span></label>
+        <label class="yn"><input type="radio" name="m4" value="Yes"><span>Yes</span></label>
+      </div>
+    </div>
+    <div class="med-row">
+      <span>Severe Allergies (e.g., requiring an EpiPen)?</span>
+      <div class="yns">
+        <label class="yn"><input type="radio" name="m5" value="No" checked><span>No</span></label>
+        <label class="yn"><input type="radio" name="m5" value="Yes"><span>Yes</span></label>
+      </div>
+    </div>
+    <div class="med-row">
+      <span>Any other condition, sensory sensitivity, or current medication?</span>
+      <div class="yns">
+        <label class="yn"><input type="radio" name="m6" value="No" checked><span>No</span></label>
+        <label class="yn"><input type="radio" name="m6" value="Yes"><span>Yes</span></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="field" id="med-details-box" style="display:none; margin-top: 1rem;">
+    <span style="color: var(--brand-orange);">You answered YES to one or more conditions above. Please provide details (including any medication names):</span>
+    <textarea class="input" id="fmeddetails" placeholder="Provide confidential details here..."></textarea>
+  </div>
+
+  <p class="sec" style="margin-top:3rem;">4 · Declaration & Signature *</p>
+  <div class="sig-wrap">
+    <canvas id="sigCanvas"></canvas>
+    <div class="sig-actions"><button type="button" class="sig-clear" id="sigClear">Clear signature</button></div>
+  </div>
+  <p class="note" style="margin-top:.6rem">Sign with your finger, stylus, or mouse.</p>
+
+  <label class="declare">
+    <input type="checkbox" id="fdeclare" required>
+    <span>I confirm that I have received the site pre-induction, understood all safety protocols, and have answered the above scenarios honestly and to the best of my knowledge. I agree to comply with all site safety rules and understand that failure to do so may result in removal from the site.</span>
+  </label>
+
+  <div class="actions">
+    <button type="submit" class="btn primary" id="submitBtn">Submit Pre-Induction & Send PDF</button>
+    <button type="button" class="btn ghost" id="previewBtn">Preview PDF</button>
+  </div>
+  <p class="note">A copy of the signed PDF will automatically download for your records upon successful submission.</p>
+</form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
+<script>
+(() => {
+  'use strict';
+
+  const TARGET_EMAIL = 'dumitru@regencyfacades.co.uk';
+
+  const $ = s => document.querySelector(s);   const $$ = s => [...document.querySelectorAll(s)];
+  const toast = $('#toast');
+  let tT;
+  const showToast = msg => { 
+    toast.textContent = msg; 
+    toast.classList.add('show'); 
+    clearTimeout(tT); 
+    tT = setTimeout(() => toast.classList.remove('show'), 4500); 
+  };
+
+  const translationLanguages = [
+    ['English (UK)', 'en'], ['Arabic', 'ar'], ['Albanian', 'sq'], ['Amharic', 'am'], ['Armenian', 'hy'],
+    ['Azerbaijani', 'az'], ['Bengali', 'bn'], ['Bulgarian', 'bg'], ['Cantonese', 'yue'], ['Chinese (Simplified)', 'zh-CN'],
+    ['Chinese (Traditional)', 'zh-TW'], ['Czech', 'cs'], ['Danish', 'da'], ['Dutch', 'nl'], ['Estonian', 'et'],
+    ['Farsi / Persian', 'fa'], ['Filipino / Tagalog', 'tl'], ['Finnish', 'fi'], ['French', 'fr'], ['Georgian', 'ka'],
+    ['German', 'de'], ['Greek', 'el'], ['Gujarati', 'gu'], ['Hausa', 'ha'], ['Hebrew', 'he'],
+    ['Hindi', 'hi'], ['Hungarian', 'hu'], ['Icelandic', 'is'], ['Igbo', 'ig'], ['Indonesian', 'id'],
+    ['Irish', 'ga'], ['Italian', 'it'], ['Japanese', 'ja'], ['Javanese', 'jv'], ['Kannada', 'kn'],
+    ['Kazakh', 'kk'], ['Khmer', 'km'], ['Kinyarwanda', 'rw'], ['Korean', 'ko'], ['Kurdish', 'ku'],
+    ['Kyrgyz', 'ky'], ['Lao', 'lo'], ['Latvian', 'lv'], ['Lithuanian', 'lt'], ['Luxembourgish', 'lb'],
+    ['Macedonian', 'mk'], ['Malagasy', 'mg'], ['Malay', 'ms'], ['Malayalam', 'ml'], ['Maltese', 'mt'],
+    ['Mandarin Chinese', 'zh-CN'], ['Maori', 'mi'], ['Marathi', 'mr'], ['Mongolian', 'mn'], ['Nepali', 'ne'],
+    ['Norwegian', 'no'], ['Pashto', 'ps'], ['Polish', 'pl'], ['Portuguese', 'pt'], ['Punjabi', 'pa'],
+    ['Romanian', 'ro'], ['Russian', 'ru'], ['Scottish Gaelic', 'gd'], ['Serbian', 'sr'], ['Shona', 'sn'],
+    ['Sindhi', 'sd'], ['Sinhala', 'si'], ['Slovak', 'sk'], ['Slovenian', 'sl'], ['Somali', 'so'],
+    ['Spanish', 'es'], ['Sundanese', 'su'], ['Swahili', 'sw'], ['Swedish', 'sv'], ['Tamil', 'ta'],
+    ['Telugu', 'te'], ['Thai', 'th'], ['Tigrinya', 'ti'], ['Tongan', 'to'], ['Turkish', 'tr'],
+    ['Ukrainian', 'uk'], ['Urdu', 'ur'], ['Uzbek', 'uz'], ['Vietnamese', 'vi'], ['Welsh', 'cy'],
+    ['Wolof', 'wo'], ['Xhosa', 'xh'], ['Yoruba', 'yo'], ['Zulu', 'zu'], ['Afrikaans', 'af'],
+    ['Akan / Twi', 'ak'], ['Assamese', 'as'], ['Basque', 'eu'], ['Belarusian', 'be'], ['Bosnian', 'bs'],
+    ['Catalan', 'ca'], ['Chichewa', 'ny'], ['Corsican', 'co'], ['Esperanto', 'eo'], ['Fijian', 'fj'],
+    ['Frisian', 'fy'], ['Galician', 'gl'], ['Haitian Creole', 'ht'], ['Hmong', 'hmn'], ['Kazakh', 'kk'],
+    ['Konkani', 'kok'], ['Krio', 'kri'], ['Luganda', 'lg'], ['Luo', 'luo'], ['Mizo', 'lus'],
+    ['Oromo', 'om'], ['Quechua', 'qu'], ['Samoan', 'sm'], ['Sanskrit', 'sa'], ['Sesotho', 'st'],
+    ['Setswana', 'tn'], ['Tajik', 'tg'], ['Turkmen', 'tk'], ['Yiddish', 'yi'], ['Zazaki', 'zza']
+  ];
+
+  const languageSelect = $('#translationLanguage');
+  translationLanguages.forEach(([name, code]) => {
+    const option = document.createElement('option');
+    option.value = code;
+    option.textContent = name;
+    languageSelect.append(option);
+  });
+
+  function splitForTranslation(text, maxLength = 450) {
+    const words = text.split(/\s+/);
+    const chunks = [];
+    let chunk = '';
+    words.forEach(word => {
+      if (chunk && (chunk + ' ' + word).length > maxLength) {
+        chunks.push(chunk);
+        chunk = word;
+      } else {
+        chunk = chunk ? chunk + ' ' + word : word;
+      }
+    });
+    if (chunk) chunks.push(chunk);
+    return chunks;
+  }
+
+  async function translateText(text, language) {
+    const translated = [];
+    for (const chunk of splitForTranslation(text)) {
+      const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunk) + '&langpair=en|' + encodeURIComponent(language);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Translation service unavailable');
+      const result = await response.json();
+      if (Number(result.responseStatus) !== 200 || !result.responseData?.translatedText) {
+        throw new Error('No translation was returned for this language');
+      }
+      const decoded = document.createElement('textarea');
+      decoded.innerHTML = result.responseData.translatedText;
+      translated.push(decoded.value);
+    }
+    return translated.join(' ');
+  }
+
+  let activeSpeechButton = null;
+  let activeSpeechToken = 0;
+
+  function addTextTools(element) {
+    const original = document.createElement('span');
+    original.className = 'translation-original';
+    Array.from(element.childNodes).forEach(node => original.append(node));
+
+    const translated = document.createElement('span');
+    translated.className = 'translated-copy';
+    translated.hidden = true;
+
+    const tools = document.createElement('span');
+    tools.className = 'text-tools';
+    const listenButton = document.createElement('button');
+    listenButton.type = 'button';
+    listenButton.textContent = 'Listen';
+    listenButton.setAttribute('aria-label', 'Listen to this text');
+    const translateButton = document.createElement('button');
+    translateButton.type = 'button';
+    translateButton.textContent = 'Translate';
+    translateButton.setAttribute('aria-label', 'Translate this text');
+    tools.append(listenButton, translateButton);
+    element.append(original, translated, tools);
+
+    listenButton.addEventListener('click', () => {
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        showToast('Speech playback is not supported by this browser.');
+        return;
+      }
+      if (activeSpeechButton === listenButton && window.speechSynthesis.speaking) {
+        activeSpeechToken += 1;
+        window.speechSynthesis.cancel();
+        listenButton.textContent = 'Listen';
+        activeSpeechButton = null;
+        return;
+      }
+      if (activeSpeechButton) activeSpeechButton.textContent = 'Listen';
+      window.speechSynthesis.cancel();
+      const token = ++activeSpeechToken;
+      const isTranslated = !translated.hidden;
+      const utterance = new SpeechSynthesisUtterance((isTranslated ? translated : original).textContent.trim());
+      utterance.lang = isTranslated ? languageSelect.value : 'en-GB';
+      utterance.onend = utterance.onerror = () => {
+        if (token !== activeSpeechToken) return;
+        listenButton.textContent = 'Listen';
+        activeSpeechButton = null;
+      };
+      listenButton.textContent = 'Stop';
+      activeSpeechButton = listenButton;
+      window.speechSynthesis.speak(utterance);
+    });
+
+    translateButton.addEventListener('click', async () => {
+      if (!translated.hidden) {
+        translated.hidden = true;
+        original.hidden = false;
+        translateButton.textContent = 'Translate';
+        return;
+      }
+      if (languageSelect.value === 'en') {
+        showToast('Choose a language other than English to translate.');
+        return;
+      }
+
+      translateButton.disabled = true;
+      translateButton.textContent = 'Translating...';
+      try {
+        translated.textContent = await translateText(original.textContent.trim(), languageSelect.value);
+        translated.lang = languageSelect.value;
+        original.hidden = true;
+        translated.hidden = false;
+        translateButton.textContent = 'Show original';
+      } catch (error) {
+        console.error(error);
+        translateButton.textContent = 'Translate';
+        showToast('Translation failed. Please try again in a moment.');
+      } finally {
+        translateButton.disabled = false;
+      }
+    });
+  }
+
+  $$('p, h2.form-title, .sec, .q-title, .field > span, .med-row > span, .declare > span')
+    .forEach(addTextTools);
+
+  const questionAnswers = $$('.q-answer');
+  const medicalDisclosureHeading = $$('.sec').find(section => section.textContent.includes('Confidential Medical Disclosure'));
+
+  function advanceToNextAnswer(currentIndex) {
+    const nextAnswer = questionAnswers.slice(currentIndex + 1).find(answer => !answer.value.trim());
+    if (nextAnswer) {
+      nextAnswer.focus({ preventScroll: true });
+      nextAnswer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (medicalDisclosureHeading) {
+      medicalDisclosureHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  questionAnswers.forEach((answer, index) => {
+    answer.setAttribute('enterkeyhint', 'next');
+    answer.addEventListener('focus', () => {
+      answer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    answer.addEventListener('blur', event => {
+      if (!answer.value.trim()) return;
+
+      const destination = event.relatedTarget;
+      if (destination && destination !== document.body && destination !== document.documentElement) return;
+
+      window.setTimeout(() => {
+        const activeElement = document.activeElement;
+        if (activeElement && activeElement !== document.body && activeElement !== document.documentElement && activeElement !== answer) return;
+        advanceToNextAnswer(index);
+      }, 80);
+    });
+  });
+
+  /* ===== Medical Details Toggle ===== */
+  $$('.med-row input[type="radio"]').forEach(radio => {     radio.addEventListener('change', () => {       const hasYes = $$
+('.med-row input[value="Yes"]:checked').length > 0;
+      $('#med-details-box').style.display = hasYes ? 'block' : 'none';
+      if(hasYes) $('#fmeddetails').setAttribute('required', 'true');
+      else $('#fmeddetails').removeAttribute('required');
+    });
+  });
+
+  /* ===== signature pad ===== */
+  const canvas = $('#sigCanvas');
+  const sigPad = new SignaturePad(canvas, { backgroundColor: '#ffffff', penColor: '#20242a', minWidth: 1, maxWidth: 2.5 });
+  const resizeCanvas = () => {
+    const saved = sigPad.isEmpty() ? null : sigPad.toDataURL();
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.getContext('2d').scale(ratio, ratio);
+    if (saved) sigPad.fromDataURL(saved); else sigPad.clear();
+  };
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  $('#sigClear').addEventListener('click', () => sigPad.clear());
+
+  /* ===== Qualifications ===== */
+  const qualRows = $('#qualRows');
+  const qualNone = $('#qualNone');
+  const qualAdd = $('#qualAdd');
+
+  function addQualRow() {
+    const row = document.createElement('div');
+    row.className = 'qual-row';
+    row.innerHTML =
+      '<div><label>Qualification type</label><input class="input qual-type" type="text" placeholder="e.g. CSCS, IPAF, PASMA"></div>' +
+      '<div><label>Registration number</label><input class="input qual-reg" type="text" placeholder="Registration / card number"></div>' +
+      '<div><label>Expiry date</label><input class="input qual-exp" type="date"></div>' +
+      '<button type="button" class="sig-clear qual-remove">Remove</button>' +
+      '<div class="qual-photo-wrap"><label>Photo(s) of qualification card / certificate</label><input class="input qual-photo" type="file" accept="image/*" multiple></div>';
+    row.querySelector('.qual-remove').addEventListener('click', () => {
+      if ($$('.qual-row').length > 1) row.remove();
+      else row.querySelectorAll('input').forEach(i => { i.value = ''; });
+    });
+    qualRows.append(row);
+  }
+  addQualRow();
+  qualAdd.addEventListener('click', addQualRow);
+  qualNone.addEventListener('change', () => {
+    qualRows.hidden = qualAdd.hidden = qualNone.checked;
+  });
+
+  function qualificationsValid(data) {
+    if (data.qualNone) return true;
+    if (!data.qualifications.length) return false;
+    return data.qualifications.every(q => q.type && q.reg && q.expiry);
+  }
+
+  const formatDate = iso => {
+    const [y, m, d] = iso.split('-');
+    return d + '/' + m + '/' + y;
+  };
+
+  /* ===== Data Gathering ===== */
+  function gatherData() {
+    const data = {
+      name: $('#fname').value.trim(),
+      company: $('#fcompany').value.trim(),
+      role: $('#frole').value.trim(),
+      phone: $('#fphone').value.trim(),
+      email: $('#femail').value.trim(),
+      emergName: $('#femergname').value.trim(),
+      emergPhone: $('#femergphone').value.trim(),
+      answers: [],
+      medical: [],
+      medDetails: $('#fmeddetails').value.trim()
+    };
+    
+    // Read the untranslated text node so the Listen/Translate button labels are excluded.
+    const originalText = el => el.querySelector('.translation-original').textContent.trim();
+
+    $$('.q-box').forEach(box => {
+      const answerEl = box.querySelector('.q-answer');
+      if (!answerEl) return;
+      const titleEl = box.querySelector('.q-title .translation-original').cloneNode(true);
+      const numEl = titleEl.querySelector('.q-num');
+      const n = numEl.textContent.trim();
+      numEl.remove();
+      data.answers.push({
+        n,
+        title: titleEl.textContent.trim(),
+        question: originalText(box.querySelector('.field > span')),
+        answer: answerEl.value.trim()
+      });
+    });
+
+    data.qualNone = $('#qualNone').checked;
+    data.qualifications = data.qualNone ? [] : $$('.qual-row').map(row => ({
+      type: row.querySelector('.qual-type').value.trim(),
+      reg: row.querySelector('.qual-reg').value.trim(),
+      expiry: row.querySelector('.qual-exp').value,
+      files: [...row.querySelector('.qual-photo').files]
+    })).filter(q => q.type || q.reg || q.expiry || q.files.length);
+    data.qualQuestion = originalText($('#qualBox .field > span'));
+
+    $$('.med-row').forEach(row => {
+      const condition = originalText(row.querySelector(':scope > span'));
+      const checked = row.querySelector('input:checked');
+      data.medical.push({ condition, answer: checked ? checked.value : 'No' });
+    });
+
+    return data;
+  }
+
+  /* ===== Qualification photos ===== */
+  // Cap the long edge at 2000px at high JPEG quality so text on cards stays legible.
+  function fileToJpeg(file, maxEdge = 2000, quality = 0.88) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = () => {
+        const scale = Math.min(1, maxEdge / Math.max(im.width, im.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(im.width * scale);
+        c.height = Math.round(im.height * scale);
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.drawImage(im, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve({ dataUrl: c.toDataURL('image/jpeg', quality), width: c.width, height: c.height });
+      };
+      im.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Unreadable image')); };
+      im.src = url;
+    });
+  }
+
+  /* ===== PDF Builder ===== */
+  function loadBrandLogo() {
+    return new Promise(resolve => {
+      const logo = new Image();
+      logo.onload = () => resolve(logo);
+      logo.onerror = () => resolve(null);
+      logo.src = 'logo.png';
+    });
+  }
+
+  async function buildPDF(data, sigDataUrl) {
+    const jsPDF = window.jspdf.jsPDF;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+    const W = 210, M = 20, CW = W - M * 2;
+    const logoImage = await loadBrandLogo();
+    
+    const drawPageBackgroundAndHeader = () => {
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 0, W, 297, 'F'); 
+
+      doc.setDrawColor(232, 122, 36);
+      doc.setLineWidth(1.5);
+      doc.line(0, 32, W, 32);
+
+      if (logoImage) {
+        const logoProps = doc.getImageProperties(logoImage);
+        const logoHeight = 18;
+        const logoWidth = Math.min(48, logoHeight * logoProps.width / logoProps.height);
+        doc.addImage(logoImage, 'JPEG', M, 7, logoWidth, logoHeight);
+      } else {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(32, 36, 42);
+        doc.text('REGENCY FACADES', M, 18);
+      }
+
+      doc.setTextColor(32, 36, 42);
+      doc.setFontSize(14);
+      doc.text('Site Safety Pre-Induction', W - M, 16, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(92, 100, 110);
+      doc.text('Operative Knowledge & Assessment Record', W - M, 22, { align: 'right' });
+    };
+
+    drawPageBackgroundAndHeader();
+    let y = 46;
+    
+    const info = [
+      ['Operative Name:', data.name || '—'], 
+      ['Company / Sub:', data.company || '—'], 
+      ['Trade / Role:', data.role || '—'],
+      ['Phone Number:', data.phone || '—'], 
+      ['Email Address:', data.email || '—'],
+      ['Emerg. Contact:', (data.emergName || '—') + '  /  ' + (data.emergPhone || '—')]
+    ];
+    
+    const boxH = 12 + info.length * 5.5 + 2;
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(210, 216, 222);
+    doc.roundedRect(M, y, CW, boxH, 3, 3, 'FD');
+    
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(232, 122, 36);
+    doc.text('Operative Details', M + 4, y + 7);
+    
+    doc.setFontSize(10);
+    info.forEach((row, i) => {
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(92, 100, 110);
+      doc.text(row[0], M + 4, y + 14 + i * 5.5);
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(32, 36, 42);
+      const wrapped = doc.splitTextToSize(row[1], CW - 35);
+      doc.text(wrapped, M + 35, y + 14 + i * 5.5);
+      if (wrapped.length > 1) y += (wrapped.length - 1) * 4;
+    });
+    
+    y += boxH + 8;
+    
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(232, 122, 36);
+    doc.text('Pre-Induction Scenarios & Responses', M, y); 
+    y += 8;
+    
+    data.answers.forEach(a => {
+      doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(92, 100, 110);
+      const qHeader = a.n + '. ' + a.title;
+      doc.text(qHeader, M, y);
+      y += 5;
+      
+      doc.setFontSize(9); doc.setFont('helvetica', 'italic'); doc.setTextColor(76, 84, 92);
+      const qLines = doc.splitTextToSize(a.question, CW);
+      doc.text(qLines, M, y);
+      y += (qLines.length * 4) + 2;
+      
+      doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(32, 36, 42);
+      const aText = a.answer || '[No answer provided]';
+      const aLines = doc.splitTextToSize(aText, CW - 4);
+      
+      const totalH = aLines.length * 5 + 8;
+      if (y + totalH > 275) { 
+        doc.addPage(); 
+        drawPageBackgroundAndHeader(); 
+        y = 44; 
+      }
+      
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(220, 224, 228);
+      doc.roundedRect(M, y - 4, CW, (aLines.length * 5) + 4, 2, 2, 'FD');
+      
+      doc.text(aLines, M + 2, y);
+      y += (aLines.length * 5) + 6;
+    });
+
+    if (y + 30 > 275) { doc.addPage(); drawPageBackgroundAndHeader(); y = 44; }
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(92, 100, 110);
+    doc.text('12. Qualifications', M, y);
+    y += 5;
+    doc.setFontSize(9); doc.setFont('helvetica', 'italic'); doc.setTextColor(76, 84, 92);
+    const qqLines = doc.splitTextToSize(data.qualQuestion, CW);
+    doc.text(qqLines, M, y);
+    y += (qqLines.length * 4) + 2;
+
+    const qualLines = data.qualNone
+      ? ['No relevant qualifications held.']
+      : data.qualifications.map((q, i) =>
+          (i + 1) + '. ' + (q.type || '—') + '  |  Reg. No: ' + (q.reg || '—') + '  |  Expires: ' + (q.expiry ? formatDate(q.expiry) : '—'));
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(32, 36, 42);
+    const wrappedQual = qualLines.flatMap(l => doc.splitTextToSize(l, CW - 4));
+    if (y + wrappedQual.length * 5 + 8 > 275) { doc.addPage(); drawPageBackgroundAndHeader(); y = 44; }
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(220, 224, 228);
+    doc.roundedRect(M, y - 4, CW, (wrappedQual.length * 5) + 4, 2, 2, 'FD');
+    doc.text(wrappedQual, M + 2, y);
+    y += (wrappedQual.length * 5) + 6;
+
+    for (const q of data.qualifications || []) {
+      for (let i = 0; i < q.files.length; i++) {
+        let img;
+        try { img = await fileToJpeg(q.files[i]); } catch (e) { continue; }
+        const maxW = CW, maxH = 190;
+        let w = maxW, h = w * img.height / img.width;
+        if (h > maxH) { h = maxH; w = h * img.width / img.height; }
+        if (y + h + 12 > 280) { doc.addPage(); drawPageBackgroundAndHeader(); y = 44; }
+        doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.setTextColor(76, 84, 92);
+        doc.text('Photo ' + (i + 1) + ' of ' + q.files.length + ' - ' + (q.type || 'Qualification') + ' (' + (q.reg || '—') + ')', M, y);
+        y += 3;
+        doc.addImage(img.dataUrl, 'JPEG', M, y, w, h, undefined, 'FAST');
+        y += h + 8;
+      }
+    }
+    
+    if (y + 50 > 275) { doc.addPage(); drawPageBackgroundAndHeader(); y = 44; }
+    else { y += 6; }
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(232, 122, 36);
+    doc.text('Confidential Medical Disclosure', M, y); y += 6;
+
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(220, 224, 228);
+    doc.roundedRect(M, y, CW, 10 + (data.medical.length * 6), 2, 2, 'FD');
+    let my = y + 7;
+
+    data.medical.forEach(m => {
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(92, 100, 110); doc.setFontSize(9);
+      doc.text(m.condition, M + 4, my);
+      
+      doc.setFont('helvetica', 'bold');
+      if (m.answer === 'Yes') doc.setTextColor(239, 68, 68);
+      else doc.setTextColor(34, 197, 94);
+      doc.text(m.answer, M + CW - 15, my);
+      my += 6;
+    });
+
+    y = my + 6;
+
+    if (data.medDetails) {
+      doc.setFont('helvetica', 'italic'); doc.setTextColor(232, 122, 36); doc.setFontSize(9);
+      const medLines = doc.splitTextToSize("Details provided: " + data.medDetails, CW);
+      doc.text(medLines, M, y);
+      y += medLines.length * 4 + 4;
+    }
+
+    if (y + 40 > 275) { doc.addPage(); drawPageBackgroundAndHeader(); y = 44; }
+    else { y += 4; }
+    
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(232, 122, 36);
+    doc.text('Declaration & Signature', M, y); y += 6;
+    
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(76, 84, 92);
+    const decText = doc.splitTextToSize("I confirm that I have received the site pre-induction, understood all safety protocols, and have answered the above scenarios honestly and to the best of my knowledge. I agree to comply with all site safety rules and understand that failure to do so may result in removal from the site.", CW);
+    doc.text(decText, M, y); 
+    y += decText.length * 4 + 4;
+    
+    doc.setDrawColor(180, 186, 192); doc.line(M, y, M + CW, y); y += 3;
+    
+    if (sigDataUrl) {
+      try {
+        const props = doc.getImageProperties(sigDataUrl);
+        let w = 80, h = w * props.height / props.width;
+        if (h > 30) { h = 30; w = h * props.width / props.height; }
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(M, y, w + 4, h + 4, 2, 2, 'F');
+        doc.addImage(sigDataUrl, 'JPEG', M + 2, y + 2, w, h); 
+        y += h + 8;
+      } catch (e) { y += 14; }
+    } else {
+      y += 14;
+    }
+    
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.setTextColor(76, 84, 92);
+    doc.text('Signed electronically on ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute:'2-digit' }), M, y);
+    
+    const pages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) {
+      doc.setPage(i); 
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 110, 120);
+      doc.text(`Digital Site Pre-Induction System · Page ${i} of ${pages}`, W / 2, 290, { align: 'center' });
+    }
+    
+    return doc;
+  }
+
+  /* ===== Form Submission ===== */
+  $('#inductionForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    
+    if (sigPad.isEmpty()) { 
+      showToast('Please add your signature before submitting ✍️'); 
+      return; 
+    }
+    if (!$('#fdeclare').checked) { 
+      showToast('Please tick the declaration at the bottom'); 
+      return; 
+    }
+    if (!qualificationsValid(gatherData())) {
+      showToast('Please complete type, registration number and expiry date for each qualification, or tick that you hold none.');
+      $('#qualBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    
+    const btn = $('#submitBtn');
+    const btnHTML = btn.innerHTML;
+    btn.disabled = true; 
+    btn.textContent = 'Generating PDF & Emailing...';
+    let doc = null;
+    let fileName = '';
+    
+    try {
+      const data = gatherData();
+      const sigDataUrl = sigPad.toDataURL('image/jpeg', 0.5);
+      doc = await buildPDF(data, sigDataUrl);
+      
+      const safeName = (data.name || 'Operative').replace(/[^a-z0-9]+/gi, '_').toLowerCase();
+      fileName = 'Pre_Induction_' + safeName + '.pdf';
+      const pdfBlob = doc.output('blob');
+      if (!pdfBlob.size) throw new Error('The generated PDF is empty.');
+      const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+      const fd = new FormData();
+      fd.append('_captcha', 'false');
+      fd.append('_template', 'box');
+      fd.append('_subject', '⚠️ New Site Pre-Induction Completed: ' + (data.name || 'Operative'));
+      fd.append('Message',
+        'Hello Site Management,\n\n' +
+        'A new digital site pre-induction has just been completed.\n\n' +
+        'Name: ' + (data.name || '—') + '\n' +
+        'Company: ' + (data.company || '—') + '\n' +
+        'Role: ' + (data.role || '—') + '\n' +
+        'Phone: ' + (data.phone || '—') + '\n' +
+        'Email: ' + (data.email || '—') + '\n\n' +
+        'Emergency Contact: ' + (data.emergName || '—') + ' / ' + (data.emergPhone || '—') + '\n\n' +
+        'The fully signed assessment and answers are attached as a PDF.');
+      fd.append('attachment', pdfFile, fileName);
+      const attachment = fd.get('attachment');
+      if (!(attachment instanceof File) || attachment.type !== 'application/pdf' || attachment.size === 0) {
+        throw new Error('The PDF could not be added to the email attachment.');
+      }
+
+      await fetch('https://formsubmit.co/' + TARGET_EMAIL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: fd
+      });
+
+      doc.save(fileName);
+
+      showToast('PDF with attachment submitted to FormSubmit. A copy was downloaded; form entries were kept.');
+      
+    } catch (err) { 
+      console.error(err); 
+      if (doc && fileName) doc.save(fileName);
+      const reason = err && err.message ? err.message : 'unknown email service error';
+      showToast('Email not confirmed: ' + reason + '. PDF downloaded; form data kept. Check recipient activation, then retry.');
+    } finally { 
+      btn.disabled = false; 
+      btn.innerHTML = btnHTML; 
+    }
+  });
+
+  /* ===== Preview Button ===== */
+  $('#previewBtn').addEventListener('click', async () => {
+    const data = gatherData();
+    const sigDataUrl = sigPad.isEmpty() ? null : sigPad.toDataURL('image/jpeg', 0.5);
+    const doc = await buildPDF(data, sigDataUrl);
+    window.open(doc.output('bloburl'), '_blank');
+  });
+
+})();
+</script>
+</body>
+</html>
