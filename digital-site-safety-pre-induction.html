@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regency Facades - Digital Site Safety Pre-Induction</title>
+<meta name="theme-color" content="#ffffff">
+<link href="https://fonts.bunny.net/css?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --cream: #20242a;
+  --cream-dim: rgba(32, 36, 42, 0.72);
+  --brand-orange: #e87a24; /* Regency Facades Orange */
+  --brand-orange-dim: rgba(232, 122, 36, 0.08);
+  --brand-grey: #808285; /* Regency Facades Grey */
+  --red: #ef4444;
+  --glass: #ffffff;
+  --line: rgba(32, 36, 42, 0.16);
+  --display: 'Fraunces', serif; 
+  --body: 'Space Grotesk', sans-serif;
+  color-scheme: light;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #ffffff; color: var(--cream); font: 400 1.05rem/1.65 var(--body);
+  overflow: hidden; /* Prevent scroll during slides */
+}
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
+  opacity: 1; visibility: visible; transition: opacity 0.4s, visibility 0.4s; padding: 1rem;
+}
+.modal-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.modal {
+  background: #ffffff; border: 1px solid var(--brand-orange); border-radius: 12px;
+  padding: 2.5rem 2rem; max-width: 500px; width: 100%; text-align: center;
+  box-shadow: 0 20px 40px -10px rgba(232, 122, 36, 0.2);
+  transform: translateY(0); transition: transform 0.4s;
+}
+.modal-overlay.hidden .modal { transform: translateY(20px); }
+.modal-logo { width: min(220px, 72%); height: auto; object-fit: contain; margin: 0 auto 1.25rem; display: block; }
+.modal h2 { font: 400 1.8rem var(--display); color: var(--brand-orange); margin-bottom: 1rem; }
+.modal p { color: var(--cream-dim); margin-bottom: 1.25rem; font-size: 1.05rem; }
+.modal-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.page-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.55rem; margin-top: 1rem; color: var(--cream-dim); font: 500 0.82rem var(--body); }
+.page-tools select { min-width: 0; max-width: 100%; padding: 0.55rem 2rem 0.55rem 0.7rem; border: 1px solid var(--line); border-radius: 6px; background: #ffffff; color: var(--cream); font: 500 0.82rem var(--body); }
+.page-tools button { min-height: 40px; padding: 0.55rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; background: #ffffff; color: var(--cream); font: 600 0.82rem var(--body); cursor: pointer; }
+.page-tools button:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+.page-tools button:disabled { opacity: 0.6; cursor: wait; }
+.page-tools .tool-status { flex-basis: 100%; min-height: 1.2em; }
+.translated-page { max-height: min(32vh, 260px); overflow-y: auto; padding: 0.85rem; border: 1px solid var(--line); border-left: 3px solid var(--brand-orange); border-radius: 6px; color: var(--cream); background: #ffffff; text-align: left; white-space: pre-wrap; line-height: 1.6; }
+
+.app-container {
+  display: flex; flex-direction: column; height: 100vh; height: 100dvh; min-height: 0; max-width: 900px; margin: 0 auto;
+}
+header { 
+  padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; 
+  border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 1rem;
+}
+.logo { display: flex; align-items: center; width: 130px; height: 68px; }
+.logo img { width: 100%; height: 100%; object-fit: contain; }
+.home-link { text-decoration: none; white-space: nowrap; }
+.translation-tools { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; color: var(--cream-dim); font-size: 0.85rem; }
+.translation-tools select { max-width: 100%; padding: 0.55rem 2rem 0.55rem 0.75rem; border: 1px solid var(--line); border-radius: 8px; background: #ffffff; color: var(--cream); font: 500 0.85rem var(--body); }
+.translation-status { flex-basis: 100%; min-height: 1.2em; font-size: 0.78rem; }
+.paragraph-tools { display: inline-flex; gap: 0.4rem; margin-left: 0.55rem; vertical-align: middle; white-space: nowrap; }
+.paragraph-tools button { padding: 0.28rem 0.6rem; border: 1px solid var(--line); border-radius: 6px; background: rgba(248, 250, 252, 0.06); color: var(--cream); font: 500 0.75rem var(--body); cursor: pointer; }
+.paragraph-tools button:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+.paragraph-tools button:disabled { opacity: 0.6; cursor: wait; }
+.progress-container { flex: 1; min-width: 150px; margin: 0 2rem; background: #eceff1; height: 6px; border-radius: 3px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--brand-orange); width: 0%; transition: width 0.4s ease; }
+.step-counter { font-size: 0.85rem; color: var(--brand-grey); font-weight: 700; letter-spacing: 0.1em; }
+
+.slides-container { flex: 1; position: relative; overflow: hidden; padding: 1rem 2rem; }
+.slide {
+  position: absolute; inset: 0; padding: 2rem; display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none; transform: translateX(30px); transition: 0.4s ease-out;
+  overflow-y: auto;
+}
+.slide.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+.slide.prev { transform: translateX(-30px); }
+
+.slide h2 { font: 400 2.2rem/1.2 var(--display); color: var(--brand-orange); margin-bottom: 1.5rem; }
+.slide p { color: var(--cream); font-size: 1.1rem; margin-bottom: 1.5rem; max-width: 70ch; line-height: 1.7; }
+.slide ul { margin-left: 1.5rem; margin-bottom: 1.5rem; color: var(--cream); font-size: 1.1rem; max-width: 70ch; }
+.slide li { margin-bottom: 0.8rem; }
+.slide strong { color: var(--brand-orange); font-weight: 600; }
+.slide .highlight { 
+  background: #ffffff; border: 1px solid var(--line); border-left: 4px solid var(--brand-orange);
+  padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; color: var(--cream); 
+  font-size: 1.05rem; max-width: 70ch;
+}
+.slide .alert {
+  background: #ffffff; border: 1px solid rgba(239, 68, 68, 0.35); border-left: 4px solid var(--red);
+  padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; color: var(--cream);
+}
+
+.nav-bar { padding: 1.5rem 2rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; background: #ffffff; }
+.btn {
+  padding: 0.8rem 1.8rem; border-radius: 999px; font: 600 1rem var(--body);
+  cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-outline { background: #ffffff; border: 1px solid var(--brand-grey); color: var(--cream); }
+.btn-outline:hover { background: #f5f6f7; border-color: var(--cream); }
+.btn-primary { background: var(--brand-orange); color: #fff; box-shadow: 0 4px 15px rgba(232, 122, 36, 0.3); }
+.btn-primary:hover { background: #d36a19; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232, 122, 36, 0.4); }
+
+@media (max-width: 600px) {
+  .app-container { width: 100%; }
+  header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 0.75rem 1rem; gap: 0.65rem; }
+  .logo { width: 100px; height: 52px; min-width: 0; }
+  .home-link { padding: 0.65rem 0.8rem; font-size: 0.82rem; }
+  .translation-tools { grid-column: 1 / -1; width: 100%; }
+  .translation-tools select { min-width: 0; flex: 1 1 100%; }
+  .translation-tools { grid-column: 1 / -1; }
+  .translation-tools select { flex: 1 1 100%; }
+  .progress-container { grid-column: 1 / -1; margin: 0; width: 100%; min-width: 0; }
+  .step-counter { grid-column: 1 / -1; text-align: right; }
+  .slides-container { min-height: 0; padding: 0.5rem 0.75rem; }
+  .slide { padding: 1rem; overscroll-behavior-y: contain; }
+  .slide h2 { font-size: 1.65rem; margin-bottom: 1rem; }
+  .slide p, .slide ul { font-size: 1rem; margin-bottom: 1rem; }
+  .slide .highlight, .slide .alert { padding: 1rem; margin-bottom: 1rem; }
+  .modal { padding: 1.25rem 1rem; }
+  .modal-logo { width: min(190px, 70%); }
+  .page-tools { gap: 0.4rem; }
+  .page-tools label { flex-basis: 100%; text-align: left; }
+  .page-tools select { flex: 1 1 100%; }
+  .page-tools button { flex: 1 1 auto; }
+  .modal-actions { flex-direction: column; gap: 0.65rem; }
+  .modal-actions .btn { width: 100%; min-height: 48px; padding: 0.7rem 0.8rem; }
+  .nav-bar { padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom)); gap: 0.75rem; }
+  .nav-bar .btn { min-height: 44px; padding: 0.7rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Welcome -->
+<div id="modal-welcome" class="modal-overlay">
+  <section class="modal" data-page-view>
+    <img class="modal-logo" src="logo.png" alt="Regency Facades">
+    <h2>Regency Facades Digital Site Safety Pre-Induction</h2>
+    <p>This Digital Site Safety Pre-Induction covers essential site safety information and working practices, followed by a knowledge assessment.</p>
+    <p>Please allow at least 40 minutes to review the material carefully and complete the assessment. Take your time, and contact Site Management if you need clarification or support before starting work.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" type="button" onclick="closeModal('modal-welcome'); openModal('modal-age')">Begin Digital Site Safety Pre-Induction</button>
+    </div>
+    <div class="page-tools" data-page-tools>
+      <label for="welcome-language">Language</label>
+      <select id="welcome-language" class="translation-language" aria-label="Choose translation and speech language"></select>
+      <button type="button" data-listen-page>Listen to this screen</button>
+      <button type="button" data-translate-page>Translate this screen</button>
+      <span class="tool-status" role="status" aria-live="polite"></span>
+      <div class="translated-page" hidden aria-label="Translated screen text" aria-live="polite"></div>
+    </div>
+  </section>
+</div>
+
+<!-- Age Verification -->
+<div id="modal-age" class="modal-overlay hidden">
+  <div class="modal">
+    <img class="modal-logo" src="logo.png" alt="Regency Facades">
+    <h2>Age Verification</h2>
+    <p>Are you under 18 years of age?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="handleAge(true)">Yes, I am under 18</button>
+      <button class="btn btn-primary" onclick="handleAge(false)">No, I am 18 or over</button>
+    </div>
+    <div id="age-warning" class="alert" style="display:none; margin-top: 1.5rem; font-size: 0.95rem; text-align: left;">
+      ⚠️ Because you are under 18, a <strong>Young Person Risk Assessment</strong> must be completed with Site Management before you can commence any work on site. Please inform management immediately after the Digital Site Safety Pre-Induction.
+    </div>
+    <button id="age-continue" class="btn btn-primary" style="display:none; margin-top: 1rem; width: 100%;" onclick="closeModal('modal-age'); openModal('modal-arrangements')">Acknowledge & Continue</button>
+    <div class="page-tools" data-page-tools>
+      <label for="age-language">Language</label>
+      <select id="age-language" class="translation-language" aria-label="Choose translation and speech language"></select>
+      <button type="button" data-listen-page>Listen to this screen</button>
+      <button type="button" data-translate-page>Translate this screen</button>
+      <span class="tool-status" role="status" aria-live="polite"></span>
+      <div class="translated-page" hidden aria-label="Translated screen text" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Additional Arrangements -->
+<div id="modal-arrangements" class="modal-overlay hidden">
+  <div class="modal">
+    <img class="modal-logo" src="logo.png" alt="Regency Facades">
+    <h2>Additional Support</h2>
+    <p>Do you require any additional arrangements, reasonable adjustments, or language translation support to safely complete the Digital Site Safety Pre-Induction and work on site?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="handleArrangements(true)">Yes, I need support</button>
+      <button class="btn btn-primary" onclick="handleArrangements(false)">No, I do not</button>
+    </div>
+    <div id="arrangements-warning" class="highlight" style="display:none; margin-top: 1.5rem; font-size: 0.95rem; text-align: left;">
+      ⚠️ Please speak directly to Site Management so we can provide the necessary translation documents or physical arrangements to ensure your safety and understanding before proceeding.
+    </div>
+    <button id="arr-continue" class="btn btn-primary" style="display:none; margin-top: 1rem; width: 100%;" onclick="closeModal('modal-arrangements'); startDigitalSiteSafetyPreInduction();">Acknowledge & Start Digital Site Safety Pre-Induction</button>
+    <div class="page-tools" data-page-tools>
+      <label for="support-language">Language</label>
+      <select id="support-language" class="translation-language" aria-label="Choose translation and speech language"></select>
+      <button type="button" data-listen-page>Listen to this screen</button>
+      <button type="button" data-translate-page>Translate this screen</button>
+      <span class="tool-status" role="status" aria-live="polite"></span>
+      <div class="translated-page" hidden aria-label="Translated screen text" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<div class="app-container">
+  <header>
+    <div class="logo">
+      <!-- Regency Facades Logo -->
+      <img src="logo.png" alt="Regency Facades">
+    </div>
+    <a class="btn btn-outline home-link" href="digital-site-safety-pre-induction-questionnaire.html" aria-label="Return to the Digital Site Safety Pre-Induction questionnaire">Return to Questionnaire</a>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="step-counter"><span id="currentStep">1</span> / 12</div>
+    <div class="translation-tools">
+      <label for="translationLanguage">Translation language</label>
+      <select id="translationLanguage" class="translation-language" aria-label="Choose a language for translation and speech"></select>
+      <button type="button" data-listen-slide>Listen to this screen</button>
+      <button type="button" data-translate-slide>Translate this screen</button>
+      <span class="translation-status" id="translationStatus" role="status" aria-live="polite"></span>
+      <div class="translated-page" id="slideTranslation" hidden aria-label="Translated slide text" aria-live="polite"></div>
+    </div>
+  </header>
+
+  <div class="slides-container">
+    
+    <!-- 1. Awareness & GDPR -->
+    <div class="slide active" data-step="1">
+      <h2>1. Awareness & GDPR</h2>
+      <p>Welcome to the Regency Facades Digital Site Safety Pre-Induction. It is vitally important that the Digital Site Safety Pre-Induction is undertaken and fully understood before you commence any work.</p>
+      <div class="highlight">
+        Site management requires certain personal and medical details to ensure we can keep you safe and contact your next of kin in an emergency. Proper data collection standards mean your information is explicitly consented to, protected, and used strictly for site safety and emergency protocols.
+      </div>
+    </div>
+
+    <!-- 2. Medication -->
+    <div class="slide" data-step="2">
+      <h2>2. Medication Disclosure</h2>
+      <p>You must inform site management of <strong>any medication</strong> you are taking, regardless of whether you believe it has a "no working effect".</p>
+      <div class="highlight">
+        Sharing details of prescribed or over-the-counter medication (especially those that cause drowsiness or impair reaction times) is mandatory. In the event of an emergency, knowing exactly what medication you are on before intervention could save your life when emergency workers respond.
+      </div>
+    </div>
+
+    <!-- 3. Medical Conditions -->
+    <div class="slide" data-step="3">
+      <h2>3. Medical Conditions & Sensitivities</h2>
+      <p>You must inform management of any medical conditions or sensory sensitivities (e.g., loud noises, high-decibel drills) during the Digital Site Safety Pre-Induction.</p>
+      <div class="highlight">
+        Disclosing this ensures that site management can provide the proper specialised protection. This information will be incredibly useful and vital if it needs to be provided to an ambulance or responding emergency unit.
+      </div>
+    </div>
+
+    <!-- 4. Drugs & Alcohol -->
+    <div class="slide" data-step="4">
+      <h2>4. Drugs & Alcohol Policy</h2>
+      <p>We operate a strict zero-tolerance policy. This covers not just consumption on site, but the severe <strong>after-effects</strong> of heavy drinking or hangovers.</p>
+      <div class="alert">
+        <ul>
+          <li><strong>Suspected:</strong> If you are only suspected of being under the effects, you will be immediately removed from site and required to repeat the Digital Site Safety Pre-Induction the next day.</li>
+          <li><strong>Proven:</strong> If it is proven you are under the effects of alcohol and/or drugs, you will be immediately removed and <strong>never accepted back on site.</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. PPE -->
+    <div class="slide" data-step="5">
+      <h2>5. Personal Protective Equipment (PPE)</h2>
+      <p>The standard 5-point PPE is <strong>non-negotiable</strong> at all times. Respiratory Protective Equipment (RPE) and any other special protection equipment must be worn exactly as per the RAMS requirements.</p>
+      <div class="highlight">
+        <p><strong>Daily Inspection:</strong> PPE must be inspected every single morning and will require regular renewal.</p>
+        <p style="margin-top: 1rem;"><strong>Never borrow damaged PPE:</strong> If your equipment is broken or defective, report it to your supervisor immediately for replacement. Do not take your mate's PPE.</p>
+      </div>
+    </div>
+
+    <!-- 6. Working at height -->
+    <div class="slide" data-step="6">
+      <h2>6. Working at Height</h2>
+      <p>There are strict rules against unauthorized tampering with scaffolding, access platforms, or structure joints.</p>
+      <div class="alert">
+        <p><strong>Trades working at height:</strong> You are to make NO alterations to safe working platforms. If they are not suitable, contact site management and request the needed changes.</p>
+        <p style="margin-top: 1rem;"><strong>Scaffolders & IPAF Trained:</strong> You are NOT to adjust, build, or dismantle any safe working platforms (scaffolding, mobile towers, delta decks, podiums, etc.) without <strong>direct directives from site management</strong> to do so!</p>
+      </div>
+    </div>
+
+    <!-- 7. Fire emergency -->
+    <div class="slide" data-step="7">
+      <h2>7. Fire Emergency Response</h2>
+      <p>Upon arrival on site, check and familiarise yourself with the fire rescue plan, including escape routes, extinguisher locations, alarms, and the muster point.</p>
+      <div class="highlight">
+        <strong>Fire extinguishers are NOT for putting down the fire!</strong> They are there to help you safely leave an area that is not safe. Only if you are trained, and it is safe to do so because it is a very small fire, should you try to put it down.
+      </div>
+      <div class="alert">
+        Do not go back inside unless you have been told by site management explicitly that it is safe to do so. Operatives who fail to evacuate will be removed from site immediately and will need to repeat the Digital Site Safety Pre-Induction the next day.
+      </div>
+    </div>
+
+    <!-- 8. Emergency Response -->
+    <div class="slide" data-step="8">
+      <h2>8. Emergency Response</h2>
+      <p>In a life-threatening emergency, <strong>call 999 first thing!</strong> The seconds spent finding the first aider may save the injured life!</p>
+      <div class="highlight">
+        <ul>
+          <li><strong>Non-life-threatening:</strong> Find a way to raise the alarm (ask a colleague to do so) and find the First Aider. They can be recognised by a <strong>green cross</strong> on their hard hat.</li>
+          <li><strong>First Aid Kit:</strong> The first aid kit, including the eye wash station, is located in the site office.</li>
+          <li><strong>Reporting:</strong> All injuries and incidents are and need to be reported! Near misses can be reported anonymously via scanning the QR code from posters that are all over the site.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 9. General rules -->
+    <div class="slide" data-step="9">
+      <h2>9. General Site Rules</h2>
+      <p>To keep the site running safely and efficiently, the following rules apply to everyone:</p>
+      <div class="highlight">
+        <ul>
+          <li><strong>Signing In/Out:</strong> You must sign in and out every time you go out—even if you went for a coffee at the shop two minutes away!</li>
+          <li><strong>Warning Notices:</strong> Observe warning notices and comply with them. They are not decorating the site; they are there to provide clear information about potential hazards.</li>
+          <li><strong>Good Housekeeping:</strong> Keeping your work area tidy is a must. This saves us all lives in an emergency situation, and also saves our resources that would be otherwise wasted to clear off the mess in the end.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 10. COSHH & Env -->
+    <div class="slide" data-step="10">
+      <h2>10. COSHH & Environmental Protection</h2>
+      <p>Everything that is important to know generally about Control of Substances Hazardous to Health (COSHH) and environmental protection related to our construction site.</p>
+      <div class="highlight">
+        <ul>
+          <li>All chemicals and hazardous substances must be used and stored exactly as dictated by their COSHH assessments.</li>
+          <li>All waste must be segregated into the correct designated skips (e.g., Timber, Metal, General Waste).</li>
+          <li>Spills of oil, fuel, or chemicals must be contained immediately using site spill kits and reported to management.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 11. Right to Work Verification -->
+    <div class="slide" data-step="11">
+      <h2>11. Right to Work Verification</h2>
+      <p>Under Section 48 (Section 15A) of the Border Security, Asylum and Immigration Act 2025, Regency Facades Ltd (as Principal Contractor) is legally treated as the employer of all supply chain operatives on 'The Summit' project for immigration compliance. To ensure statutory adherence and site access authorization prior to arrival, all workers must provide verifiable proof of their legal status to work in the UK.</p>
+    </div>
+
+    <!-- 12. Completion / RAMS -->
+    <div class="slide" data-step="12" style="justify-content: center; text-align: center;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 80px; margin: 0 auto 1.5rem;">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <h2>Digital Site Safety Pre-Induction Briefing Complete</h2>
+      <p style="margin: 0 auto 1.5rem;">You have reviewed all 11 safety sections. In the following questionnaire, you will be tested on these topics and required to explain how your own <strong>RAMS rescue plan</strong> will be implemented in case of an emergency.</p>
+      <p style="margin: 0 auto 2.5rem; color: var(--cream-dim); font-size: 0.95rem;">Please proceed to complete the mandatory safety questionnaire and sign your declaration.</p>
+      <button class="btn btn-primary" onclick="goToQuestionnaire()" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Proceed to Digital Site Safety Pre-Induction Questionnaire ➔</button>
+    </div>
+
+  </div>
+
+  <div class="nav-bar">
+    <button class="btn btn-outline" id="btnPrev" onclick="changeSlide(-1)" style="visibility: hidden;">Back</button>
+    <button class="btn btn-primary" id="btnNext" onclick="changeSlide(1)">Next Section</button>
+  </div>
+</div>
+
+<script>
+  let currentSlideIndex = 0;
+  const slides = document.querySelectorAll('.slide');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const progressBar = document.getElementById('progressBar');
+  const stepCounter = document.getElementById('currentStep');
+  
+  const totalSteps = slides.length;
+
+  function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.add('hidden');
+  }
+
+  function handleAge(isUnder18) {
+    if (isUnder18) {
+      document.getElementById('age-warning').style.display = 'block';
+      document.getElementById('age-continue').style.display = 'block';
+      document.querySelector('#modal-age .modal-actions').style.display = 'none';
+    } else {
+      closeModal('modal-age');
+      openModal('modal-arrangements');
+    }
+  }
+
+  function handleArrangements(needsSupport) {
+    if (needsSupport) {
+      document.getElementById('arrangements-warning').style.display = 'block';
+      document.getElementById('arr-continue').style.display = 'block';
+      document.querySelector('#modal-arrangements .modal-actions').style.display = 'none';
+    } else {
+      closeModal('modal-arrangements');
+      startDigitalSiteSafetyPreInduction();
+    }
+  }
+
+  function startDigitalSiteSafetyPreInduction() {
+    updateUI();
+  }
+
+  function changeSlide(direction) {
+    slides[currentSlideIndex].classList.remove('active');
+    
+    if (direction > 0) {
+      slides[currentSlideIndex].classList.add('prev');
+    } else {
+      slides[currentSlideIndex - 1].classList.remove('prev');
+    }
+
+    currentSlideIndex += direction;
+    
+    if (currentSlideIndex < 0) currentSlideIndex = 0;
+    if (currentSlideIndex >= totalSteps) currentSlideIndex = totalSteps - 1;
+
+    slides[currentSlideIndex].classList.add('active');
+    updateUI();
+  }
+
+  function updateUI() {
+    const progress = ((currentSlideIndex + 1) / totalSteps) * 100;
+    progressBar.style.width = `${progress}%`;
+    stepCounter.textContent = Math.min(currentSlideIndex + 1, 12);
+
+    const slideTranslation = document.getElementById('slideTranslation');
+    slideTranslation.hidden = true;
+    slideTranslation.textContent = '';
+    slideTools.querySelector('[data-translate-slide]').textContent = 'Translate this screen';
+    document.getElementById('translationStatus').textContent = '';
+    if (activeSpeechButton) {
+      window.speechSynthesis.cancel();
+      activeSpeechButton.textContent = activeSpeechButton.dataset.idleLabel;
+      activeSpeechButton = null;
+    }
+
+    btnPrev.style.visibility = currentSlideIndex === 0 ? 'hidden' : 'visible';
+    
+    if (currentSlideIndex === totalSteps - 1) {
+      btnNext.style.display = 'none';
+    } else {
+      btnNext.style.display = 'inline-flex';
+      btnNext.textContent = 'Next Section';
+    }
+  }
+
+  function goToQuestionnaire() {
+    window.location.href = 'digital-site-safety-pre-induction-questionnaire.html';
+  }
+
+  const translationLanguages = [
+    ['English (UK)', 'en'], ['Arabic', 'ar'], ['Albanian', 'sq'], ['Amharic', 'am'], ['Armenian', 'hy'],
+    ['Azerbaijani', 'az'], ['Bengali', 'bn'], ['Bulgarian', 'bg'], ['Cantonese', 'yue'], ['Chinese (Simplified)', 'zh-CN'],
+    ['Chinese (Traditional)', 'zh-TW'], ['Czech', 'cs'], ['Danish', 'da'], ['Dutch', 'nl'], ['Estonian', 'et'],
+    ['Farsi / Persian', 'fa'], ['Filipino / Tagalog', 'tl'], ['Finnish', 'fi'], ['French', 'fr'], ['Georgian', 'ka'],
+    ['German', 'de'], ['Greek', 'el'], ['Gujarati', 'gu'], ['Hausa', 'ha'], ['Hebrew', 'he'],
+    ['Hindi', 'hi'], ['Hungarian', 'hu'], ['Icelandic', 'is'], ['Igbo', 'ig'], ['Indonesian', 'id'],
+    ['Irish', 'ga'], ['Italian', 'it'], ['Japanese', 'ja'], ['Javanese', 'jv'], ['Kannada', 'kn'],
+    ['Kazakh', 'kk'], ['Khmer', 'km'], ['Kinyarwanda', 'rw'], ['Korean', 'ko'], ['Kurdish', 'ku'],
+    ['Kyrgyz', 'ky'], ['Lao', 'lo'], ['Latvian', 'lv'], ['Lithuanian', 'lt'], ['Luxembourgish', 'lb'],
+    ['Macedonian', 'mk'], ['Malagasy', 'mg'], ['Malay', 'ms'], ['Malayalam', 'ml'], ['Maltese', 'mt'],
+    ['Mandarin Chinese', 'zh-CN'], ['Maori', 'mi'], ['Marathi', 'mr'], ['Mongolian', 'mn'], ['Nepali', 'ne'],
+    ['Norwegian', 'no'], ['Pashto', 'ps'], ['Polish', 'pl'], ['Portuguese', 'pt'], ['Punjabi', 'pa'],
+    ['Romanian', 'ro'], ['Russian', 'ru'], ['Scottish Gaelic', 'gd'], ['Serbian', 'sr'], ['Shona', 'sn'],
+    ['Sindhi', 'sd'], ['Sinhala', 'si'], ['Slovak', 'sk'], ['Slovenian', 'sl'], ['Somali', 'so'],
+    ['Spanish', 'es'], ['Sundanese', 'su'], ['Swahili', 'sw'], ['Swedish', 'sv'], ['Tamil', 'ta'],
+    ['Telugu', 'te'], ['Thai', 'th'], ['Tigrinya', 'ti'], ['Tongan', 'to'], ['Turkish', 'tr'],
+    ['Ukrainian', 'uk'], ['Urdu', 'ur'], ['Uzbek', 'uz'], ['Vietnamese', 'vi'], ['Welsh', 'cy'],
+    ['Wolof', 'wo'], ['Xhosa', 'xh'], ['Yoruba', 'yo'], ['Zulu', 'zu'], ['Afrikaans', 'af'],
+    ['Akan / Twi', 'ak'], ['Assamese', 'as'], ['Basque', 'eu'], ['Belarusian', 'be'], ['Bosnian', 'bs'],
+    ['Catalan', 'ca'], ['Chichewa', 'ny'], ['Corsican', 'co'], ['Esperanto', 'eo'], ['Fijian', 'fj'],
+    ['Frisian', 'fy'], ['Galician', 'gl'], ['Haitian Creole', 'ht'], ['Hmong', 'hmn'], ['Konkani', 'kok'],
+    ['Krio', 'kri'], ['Luganda', 'lg'], ['Luo', 'luo'], ['Mizo', 'lus'], ['Oromo', 'om'],
+    ['Quechua', 'qu'], ['Samoan', 'sm'], ['Sanskrit', 'sa'], ['Sesotho', 'st'], ['Setswana', 'tn'],
+    ['Tajik', 'tg'], ['Turkmen', 'tk'], ['Yiddish', 'yi'], ['Zazaki', 'zza']
+  ];
+
+  const languageSelects = [...document.querySelectorAll('.translation-language')];
+  languageSelects.forEach(select => {
+    translationLanguages.forEach(([name, code]) => {
+      const option = document.createElement('option');
+      option.value = code;
+      option.textContent = name;
+      select.append(option);
+    });
+    select.addEventListener('change', () => {
+      languageSelects.forEach(otherSelect => { otherSelect.value = select.value; });
+    });
+  });
+
+  function splitForTranslation(text, maxLength = 450) {
+    const chunks = [];
+    let chunk = '';
+    text.split(/\s+/).forEach(word => {
+      if (chunk && (chunk + ' ' + word).length > maxLength) {
+        chunks.push(chunk);
+        chunk = word;
+      } else {
+        chunk = chunk ? chunk + ' ' + word : word;
+      }
+    });
+    if (chunk) chunks.push(chunk);
+    return chunks;
+  }
+
+  async function translateText(text, language) {
+    const translated = [];
+    for (const chunk of splitForTranslation(text)) {
+      const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunk) + '&langpair=en|' + encodeURIComponent(language);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Translation service unavailable');
+      const result = await response.json();
+      if (Number(result.responseStatus) !== 200 || !result.responseData?.translatedText) {
+        throw new Error('No translation was returned for this language');
+      }
+      const decoded = document.createElement('textarea');
+      decoded.innerHTML = result.responseData.translatedText;
+      translated.push(decoded.value);
+    }
+    return translated.join(' ');
+  }
+
+  function getPageText(roots) {
+    const textParts = [];
+    roots.filter(Boolean).forEach(root => {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      let node;
+      while ((node = walker.nextNode())) {
+        const text = node.textContent.replace(/\s+/g, ' ').trim();
+        if (!text) continue;
+
+        let current = node.parentElement;
+        let visible = true;
+        while (current) {
+          if (current.matches('[data-page-tools], svg, script, style, [aria-hidden="true"]')) {
+            visible = false;
+            break;
+          }
+          const style = window.getComputedStyle(current);
+          if (style.display === 'none' || style.visibility === 'hidden') {
+            visible = false;
+            break;
+          }
+          if (current === root) break;
+          current = current.parentElement;
+        }
+        if (visible) textParts.push(text);
+      }
+    });
+    return textParts.join(' ');
+  }
+
+  let activeSpeechButton = null;
+
+  function addPageTools(resolveRoots, tools) {
+    const languageSelect = tools.querySelector('.translation-language');
+    const listenButton = tools.querySelector('[data-listen-page], [data-listen-slide]');
+    const translateButton = tools.querySelector('[data-translate-page], [data-translate-slide]');
+    const status = tools.querySelector('.tool-status, .translation-status');
+    const result = tools.querySelector('.translated-page');
+    const idleListenLabel = listenButton.textContent;
+    const idleTranslateLabel = translateButton.textContent;
+
+    listenButton.addEventListener('click', () => {
+      if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        status.textContent = 'Speech playback is not supported by this browser.';
+        return;
+      }
+      if (activeSpeechButton === listenButton && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        listenButton.textContent = idleListenLabel;
+        activeSpeechButton = null;
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      if (activeSpeechButton) activeSpeechButton.textContent = activeSpeechButton.dataset.idleLabel;
+      const translated = !result.hidden;
+      const text = translated ? result.textContent.trim() : getPageText(resolveRoots());
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = translated ? languageSelect.value : 'en-GB';
+      utterance.onend = utterance.onerror = () => {
+        listenButton.textContent = idleListenLabel;
+        activeSpeechButton = null;
+      };
+      listenButton.dataset.idleLabel = idleListenLabel;
+      listenButton.textContent = 'Stop listening';
+      activeSpeechButton = listenButton;
+      status.textContent = '';
+      window.speechSynthesis.speak(utterance);
+    });
+
+    translateButton.addEventListener('click', async () => {
+      if (!result.hidden) {
+        result.hidden = true;
+        translateButton.textContent = idleTranslateLabel;
+        status.textContent = '';
+        return;
+      }
+      if (languageSelect.value === 'en') {
+        status.textContent = 'Choose a language other than English to translate.';
+        return;
+      }
+
+      translateButton.disabled = true;
+      translateButton.textContent = 'Translating...';
+      status.textContent = 'Translating all visible screen text...';
+      try {
+        result.textContent = await translateText(getPageText(resolveRoots()), languageSelect.value);
+        result.lang = languageSelect.value;
+        result.hidden = false;
+        translateButton.textContent = 'Hide translation';
+        status.textContent = 'Translation complete.';
+      } catch (error) {
+        console.error(error);
+        translateButton.textContent = idleTranslateLabel;
+        status.textContent = 'Translation failed. Please try again.';
+      } finally {
+        translateButton.disabled = false;
+      }
+    });
+  }
+
+  document.querySelectorAll('.modal .page-tools').forEach(tools => {
+    addPageTools(() => [tools.closest('.modal')], tools);
+  });
+
+  const slideTools = document.querySelector('.translation-tools');
+  addPageTools(() => [
+    document.querySelector('.slide.active'),
+    document.querySelector('.nav-bar'),
+    document.querySelector('.home-link'),
+    document.querySelector('.step-counter')
+  ], slideTools);
+
+  document.addEventListener('keydown', (e) => {
+    if (document.querySelector('.modal-overlay:not(.hidden)')) return;
+
+    if (e.key === 'ArrowRight' && currentSlideIndex < totalSteps - 1) {
+      changeSlide(1);
+    } else if (e.key === 'ArrowLeft' && currentSlideIndex > 0) {
+      changeSlide(-1);
+    }
+  });
+</script>
+</body>
+</html>
